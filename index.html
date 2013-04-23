@@ -1,0 +1,266 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <title>Teste Game</title>
+  
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.min.js'></script>
+  
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/result-light.css"/>
+  
+    
+    
+      <script type='text/javascript' src="js/jquery.gamequery-0.7.1.js"></script>
+    
+  
+  <style type='text/css'>
+    
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+$(window).load(function(){
+// Global constants:
+var PLAYGROUND_WIDTH    = 544;
+var PLAYGROUND_HEIGHT    = 414;
+var REFRESH_RATE        = 30;
+var MISSILE_SPEED = 10; //px per frame
+
+//Constants for the gameplay
+var smallStarSpeed        = 1; //pixels per frame
+    
+var mediumStarSpeed       = 3; //pixels per frame
+    
+var bigStarSpeed          = 5; //pixels per frame
+
+// Game state
+var bossMode = false;
+var bossName = null;
+var playerHit = false;
+var timeOfRespawn = 0;
+var gameOver = false;
+    
+// --------------------------------------------------------------------
+// --                      the main declaration:                     --
+// --------------------------------------------------------------------
+function Player(node){
+
+    this.node = node;
+    //this.animations = animations;
+
+    this.grace = false;
+    this.replay = 3; 
+    this.shield = 3; 
+    this.respawnTime = -1;
+    this.velocity = 10;
+
+    this.x = 0;
+    this.y = 0;
+    
+    // This function damage the ship and return true if this cause the ship to die 
+    this.damage = function(){
+        if(!this.grace){
+            this.shield--;
+            if (this.shield == 0){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    };
+    
+    // this try to respawn the ship after a death and return true if the game is over
+    this.respawn = function(){
+        this.replay--;
+        if(this.replay==0){
+            return true;
+        }
+        
+        this.grace  = true;
+        this.shield = 3;
+        
+        this.respawnTime = (new Date()).getTime();
+        $(this.node).fadeTo(0, 0.5); 
+        return false;
+    };
+    
+    this.update = function(){
+        if((this.respawnTime > 0) && (((new Date()).getTime()-this.respawnTime) > 3000)){
+            this.grace = false;
+            $(this.node).fadeTo(500, 1); 
+            this.respawnTime = -1;
+        }
+    }
+    
+    return true;
+}
+
+
+
+// Gloabl animation holder
+var playerAnimation = new Array();
+var enemies = new Array(); // There are three kind of enemies in the game
+var missile = new Array();
+
+$(function(){
+    // Animations declaration: 
+
+    playerAnimation["idle"] = new $.gameQuery.Animation({imageURL: "resources/5.png"});
+    
+
+    
+    //  List of enemies animations :
+    // 1st kind of enemy:
+    enemies["idle"]  = new $.gameQuery.Animation({imageURL: "resources/001.png"});
+    
+/*
+    missile["player"] = new $.gQ.Animation({imageURL: "player.png", numberOfFrame: 6, delta: 10, rate: 90, type: $.gQ.ANIMATION_VERTICAL});
+  */  
+
+
+
+
+    // The background:    
+    var background1 = new $.gameQuery.Animation({ imageURL: "resources/bg.png"});
+    
+    // Initialize the game:
+    $("#playground"). playground({height: PLAYGROUND_HEIGHT, 
+           width: PLAYGROUND_WIDTH, keyTracker: true});
+
+
+    // Initialize the background
+    $.playground()
+        .addGroup("background", {width: PLAYGROUND_WIDTH, 
+                                 height: PLAYGROUND_HEIGHT})
+        .addSprite("background1", {animation: background1, 
+                                   width: PLAYGROUND_WIDTH, 
+                                   height: PLAYGROUND_HEIGHT})
+
+
+
+    $.playground().addGroup("actors", {width: PLAYGROUND_WIDTH, 
+                                   height: PLAYGROUND_HEIGHT})
+            .addGroup("player", {posx: 130, 
+                                 posy: 180, 
+                                 width: 96, 
+                                 height: 96})
+            .addSprite("playerBody",{animation: playerAnimation["idle"], 
+                                     posx: 0, 
+                                     posy: 0, 
+                                     width: 96, 
+                                     height: 96});
+    
+    $("#player")[0].player = new Player($("#player"));
+
+
+
+    $.playground()
+        .addGroup("playerMissileLayer",{width: PLAYGROUND_WIDTH, height: PLAYGROUND_HEIGHT}).end()
+        
+
+    var name = "enemy1";
+    $("#actors").addSprite(name, {animation: enemies["idle"], posx: 310, posy: 80,width: 96, height: 96});
+    $("#"+name).addClass("enemy");
+    $("#"+name)[0].enemy = new Player($("#"+name));
+
+
+    // this sets the id of the loading bar:
+    //$().setLoadBar("loadingBar", 400);
+
+    //initialize the start button
+    $("#startbutton").click(function(){
+        $.playground().startGame(function(){
+            $("#welcomeScreen").remove();
+        });
+    })
+    
+
+//Update the movement of the ship:
+$.playground().registerCallback (function(){
+
+    $("#player")[0].player.update();
+    var player1 = $("#player")[0].player;
+    
+
+    if(jQuery.gameQuery.keyTracker[65]){ //this is left! (a)
+        var nextpos = player1.x - 5;
+       // if(nextpos > 0){
+
+            $("#player").offset({ left: nextpos})
+            player1.x = nextpos;
+        //}
+    }
+    
+    if(jQuery.gameQuery.keyTracker[68]){ //this is right! (d)
+        var nextpos = player1.x + 5;
+       // if(nextpos > 0){
+
+            $("#player").offset({ left: nextpos})
+            player1.x = nextpos;
+        //}
+    }
+
+    
+    if(jQuery.gameQuery.keyTracker[87]){ //this is up! (w)
+        var nextpos = player1.y - 5;
+       // if(nextpos > 0){
+
+            $("#player").offset({ top: nextpos})
+            player1.y = nextpos;
+        //}
+    }
+
+    
+    if(jQuery.gameQuery.keyTracker[83]){ //this is up! (w)
+        var nextpos = player1.y + 5;
+       // if(nextpos > 0){
+
+            $("#player").offset({ top: nextpos})
+            player1.y = nextpos;
+        //}
+    }    
+
+}, REFRESH_RATE); 
+
+//Enimy actions
+$.playground().registerCallback (function(){
+     
+/*
+    var name = "enemy1_"+Math.ceil(Math.random()*1000);
+    console.log(name)
+    $("#actors").addSprite(name, {animation: enemies["idle"], posx: PLAYGROUND_WIDTH-100, posy: Math.random()*PLAYGROUND_HEIGHT,width: 96, height: 96});
+    $("#"+name).addClass("player");
+    $("#"+name)[0].enemy = new Player($("#"+name));
+
+*/
+}, 1000); //once per seconds is enough for this 
+
+
+
+    
+});
+
+
+
+
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div id="playground" style="width: 700px; height: 250px; background: black;">
+    <div id="welcomeScreen" style="width: 700px; height: 250px; position: absolute; z-index: 100;">
+        <div style="position: absolute; top: 120px; width: 700px; color: white;">
+            <div id="loadingBar" style="position: relative; left: 100px; height: 15px; width: 0px; background: red;"></div><br />
+            <center><a style="cursor: pointer;" id="startbutton">click here to show the demo</a></center>
+        </div>
+    </div>
+</div>
+
+</html>
+
