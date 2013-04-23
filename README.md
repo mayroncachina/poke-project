@@ -5,12 +5,17 @@ Este projeto é a versão inicial do Code Lab realizado no FLISOL NATAL (http://
 
 Será utilizado a biblioteca gameQuery (http://gamequeryjs.com/) e uma nova jogabilidade para batalhas de pokemon.
 
+# Screenshot
+
+![Tela Principal](https://photos-1.dropbox.com/t/0/AACgvtjMofdvxINi6xk-BtM3xJtkoFYc8b2xbRSsqH4Asg/12/971056/png/32x32/3/_/1/2/Captura_de_tela.png/7a_-TYWNKwPQe_2eHGPWsRZG4RtqORA9AwouyjuRGWk?size=1280x960)
+
 
 <h2>Autores:</h2>
 
- * @mayroncachina
- * @cogumm 
 
+Gabriel F. Vilar – [CoGUMm.net](http://cogumm.net)
+
+Mayron Cachina - [Cachina.com.br](http://cachina.com.br)
 
 
 <h2>License</h2>
