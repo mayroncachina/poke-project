@@ -7,7 +7,7 @@ Será utilizado a biblioteca gameQuery (http://gamequeryjs.com/) e uma nova joga
 
 # Screenshot
 
-![Tela Principal](sandbox.cachina.com.br/github/poke-projekt.png)
+![Tela Principal](http://sandbox.cachina.com.br/github/poke-projekt.png)
 
 
 <h2>Autores:</h2>
