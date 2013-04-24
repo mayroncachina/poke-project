@@ -7,7 +7,7 @@ Será utilizado a biblioteca gameQuery (http://gamequeryjs.com/) e uma nova joga
 
 # Screenshot
 
-![Tela Principal](https://photos-1.dropbox.com/t/0/AACgvtjMofdvxINi6xk-BtM3xJtkoFYc8b2xbRSsqH4Asg/12/971056/png/32x32/3/_/1/2/Captura_de_tela.png/7a_-TYWNKwPQe_2eHGPWsRZG4RtqORA9AwouyjuRGWk?size=1280x960)
+![Tela Principal](sandbox.cachina.com.br/github/poke-projekt.png)
 
 
 <h2>Autores:</h2>
@@ -17,6 +17,9 @@ Gabriel F. Vilar – [CoGUMm.net](http://cogumm.net)
 
 Mayron Cachina - [Cachina.com.br](http://cachina.com.br)
 
+<h3>Colaboradores:</h3>
+
+Mateus Bezerra
 
 <h2>License</h2>
 
