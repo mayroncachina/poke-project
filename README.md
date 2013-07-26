@@ -5,6 +5,8 @@ Este projeto é a versão inicial do Code Lab realizado no FLISOL NATAL (http://
 
 Será utilizado a biblioteca gameQuery (http://gamequeryjs.com/) e uma nova jogabilidade para batalhas de pokemon.
 
+Demo: http://sandbox.cachina.com.br/sites/poke-game/
+
 # Screenshot
 
 ![Tela Principal](http://sandbox.cachina.com.br/github/poke-projekt.png)
