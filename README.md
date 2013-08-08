@@ -7,6 +7,8 @@ Será utilizado a biblioteca gameQuery (http://gamequeryjs.com/) e uma nova joga
 
 Demo: http://sandbox.cachina.com.br/sites/poke-game/
 
+Sprites: http://sprites.pokecheck.org
+
 # Screenshot
 
 ![Tela Principal](http://sandbox.cachina.com.br/github/poke-projekt.png)
