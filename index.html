@@ -49,13 +49,25 @@ $(function(){
 
     // The background:    
     var background = new $.gameQuery.Animation({ imageURL: "resources/bg.png"});
+
+
+    //Comandos de partida (MENU)
+    var menu_run = new $.gameQuery.Animation({ imageURL: "resources/run.png"});
+    var menu_bag = new $.gameQuery.Animation({ imageURL: "resources/bag.png"});
+    var menu_pokemon = new $.gameQuery.Animation({ imageURL: "resources/pokemon.png"});
     
     // Initialize the game:
 
     //Div responsável pela área do jogo
-    $("#playground"). playground({height: PLAYGROUND_HEIGHT, width: PLAYGROUND_WIDTH, keyTracker: true});
+    $("#playground"). playground({height: PLAYGROUND_HEIGHT, 
+				  width: PLAYGROUND_WIDTH, 
+				  keyTracker: true, 
+				  mouseTracker: true,
+  				  refreshRate: 60, 
+				});
 
 
+    
     // Initialize the background
     $.playground()
         .addGroup("background", {width: PLAYGROUND_WIDTH, height: PLAYGROUND_HEIGHT})
@@ -63,104 +75,91 @@ $(function(){
                                    width: PLAYGROUND_WIDTH, 
                                    height: PLAYGROUND_HEIGHT})
 
+
     $.playground()
-        .addGroup("actors", {width: PLAYGROUND_WIDTH, height: PLAYGROUND_HEIGHT})
+        .addGroup("menu", {width: PLAYGROUND_WIDTH, height: PLAYGROUND_HEIGHT})
+        .addSprite("menu_run", {animation: menu_run, posx: 237, posy: 370, width: 78, height: 46})
+        .addSprite("menu_bag", {animation: menu_bag, posx: 0, posy: 347, width: 78, height: 78})
+        .addSprite("menu_pokemon", {animation: menu_pokemon, posx: 466, posy: 347, width: 78, height: 78})
+
+
+    $.playground()
         .addGroup("player", {posx: 130, posy: 180, width: 96, height: 96})
         .addSprite("playerBody",{animation: pokemon["charmeleon"], posx: 0, posy: 0, width: 96, height: 96});
     
-
     $("#player")[0].player = new Pokemon($("#player"));
 
 
-    var name = "enemy1";
-    $("#actors").addSprite("bubasaur", {animation: pokemon["bubasaur"], posx: 310, posy: 80,width: 96, height: 96});
-    $("#bubasaur").addClass("enemy");
-    $("#bubasaur")[0].enemy = new Pokemon($("#"+name));
+    $.playground()
+        .addGroup("enemy", {posx: 310, posy: 80, width: 96, height: 96})
+        .addSprite("bulba",{animation: pokemon["bubasaur"], posx: 0, posy: 0, width: 96, height: 96});
 
-    /*
-    var name = "diglet";
-    $("#actors").addSprite(name, {animation: pokemon["diglet"], posx: 100, posy: 80,width: 96, height: 96});
-    $("#"+name).addClass("enemy");
-    $("#"+name)[0].enemy = new Pokemon($("#"+name));
-    */
    
-    // this sets the id of the loading bar:
-    //$().setLoadBar("loadingBar", 400);
-
     //initialize the start button
-    $("#startbutton").click(function(){
-        $.playground().startGame(function(){
-            $("#welcomeScreen").remove();
-        });
-    })
-    
+        $("#startbutton").click(function(){
+          $.playground().startGame(function(){
+            $("#welcomeScreen").fadeTo(1000,0,function(){$(this).remove();});
+          });
 
-//Update the movement of the P1:
-$.playground().registerCallback (function(){
-
-    $("#player")[0].player.update();
-
-    var player1 = $("#player")[0].player;
-    //console.log(player1.x + ' - ' + player1.y )
-
-    if(jQuery.gameQuery.keyTracker[65]){ //this is left! (a)
-        var nextpos = player1.x - 5;
-        $("#player").offset({ left: nextpos})
-        player1.x = nextpos;
-    }
-    
-    if(jQuery.gameQuery.keyTracker[68]){ //this is right! (d)
-        var nextpos = player1.x + 5;
-        $("#player").offset({ left: nextpos})
-        player1.x = nextpos;
-    }
-
-    
-    if(jQuery.gameQuery.keyTracker[87]){ //this is up! (w)
-        var nextpos = player1.y - 5;
-        $("#player").offset({ top: nextpos})
-        player1.y = nextpos;
-    }
-
-    
-    if(jQuery.gameQuery.keyTracker[83]){ //this is up! (w)
-        var nextpos = player1.y + 5;
-        $("#player").offset({ top: nextpos})
-        player1.y = nextpos;
-    }    
-
-}, REFRESH_RATE); 
-
-
-//Movimento Buba
-$.playground().registerCallback (function(){
+	  //DEBUG MOUSE POSITION
 /*
-    var player2 = $("#bubasaur")[0].enemy;
-    
-    if(jQuery.gameQuery.keyTracker[65]){ //this is left! (a)
-        var nextpos = player2.x - 5;
-        $("#bubasaur").offset({ left: nextpos})
-        player2.x = nextpos;
-    }
-    */
-
-}, REFRESH_RATE);
-
-
-//Teste Gerando Inimigo Aleatório
-/*
-$.playground().registerCallback (function(){
-
-    var name = "enemy1_"+Math.ceil(Math.random()*1000);
-    console.log(name)
-
-    $("#actors").addSprite(name, {animation: pokemon["diglet"], posx: Math.random()*PLAYGROUND_WIDTH-100, posy: Math.random()*PLAYGROUND_HEIGHT,width: 96, height: 96});
-    $("#"+name).addClass("enemy");
-    $("#"+name)[0].enemy = new Pokemon($("#"+name));
-
-}, 10000); //once per seconds is enough for this 
+  	  $.playground().registerCallback(function(){
+	    console.log( $.gQ.mouseTracker );
+	  }, 1000);
 */
+        })
+    
 
+	//Update the movement of the P1:
+	$.playground().registerCallback (function(){
+
+
+	    $("#player")[0].player.update();
+
+	    var player1 = $("#player")[0].player;
+	    //console.log(player1.x + ' - ' + player1.y )
+
+	    if(jQuery.gameQuery.keyTracker[65]){ //this is left! (a)
+		var nextpos = player1.x - 5;
+		$("#player").offset({ left: nextpos})
+		player1.x = nextpos;
+	    }
+	    
+	    if(jQuery.gameQuery.keyTracker[68]){ //this is right! (d)
+		var nextpos = player1.x + 5;
+		$("#player").offset({ left: nextpos})
+		player1.x = nextpos;
+	    }
+
+	    
+	    if(jQuery.gameQuery.keyTracker[87]){ //this is up! (w)
+		var nextpos = player1.y - 5;
+		$("#player").offset({ top: nextpos})
+		player1.y = nextpos;
+	    }
+
+	    
+	    if(jQuery.gameQuery.keyTracker[83]){ //this is up! (w)
+		var nextpos = player1.y + 5;
+		$("#player").offset({ top: nextpos})
+		player1.y = nextpos;
+	    }    
+
+		/*96 a 105 numpad*/
+	   if(jQuery.gameQuery.keyTracker[97]){ //this open BAG! (1)
+		alert('OPEN THE BAG');
+	    }    
+
+	   if(jQuery.gameQuery.keyTracker[98]){ //this open BAG! (1)
+		alert('CORRE FROXO');
+	    }    
+
+	   if(jQuery.gameQuery.keyTracker[99]){ //this open BAG! (1)
+		alert('MUDA DE POKEMON');
+	    }    
+
+
+	}, REFRESH_RATE); 
 
     
 });
@@ -180,7 +179,9 @@ $.playground().registerCallback (function(){
     <div id="welcomeScreen" style="width: 544px; height: 250px; position: absolute; z-index: 100;">
 
         <div style="position: absolute; top: 120px; width: 544px; color: white;">
-            <center><a style="cursor: pointer;" id="startbutton">START</a></center>
+	    <div id="loadingBar" ></div><br />
+	    <img src="resources/ds.png" style="float:left;margin-top:-158px"/>
+            <center><a style="cursor: pointer;" id="startbutton" style="float:left;margin-top:-140px">START</a></center>
         </div>
 
     </div>
